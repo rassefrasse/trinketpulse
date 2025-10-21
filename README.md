@@ -1,2 +1,2 @@
 # trinketpulse
-lightweight cd pulse 
+lightweight cd pulse for war
