@@ -1,0 +1,5 @@
+## Interface: 11302
+## Title: TrinketPulse
+## Notes: Warrior Specific CD Pulse Addon
+## Author: Ghoulic
+TrinketPulse.lua
