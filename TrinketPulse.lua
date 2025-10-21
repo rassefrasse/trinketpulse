@@ -1,19 +1,13 @@
---================================================
--- TWPulseCooldownTracker.lua
--- Tracks Bloodrage, Death Wish, and trinkets
--- Pulses icons once per cooldown
---================================================
+
 
 local trackedSpells = {
-    [45] = "Bloodrage", -- Turtle WoW spell ID
+    [45] = "Bloodrage", -- add spells
     [37] = "Death Wish",
 }
 
-local lastPulse = {} -- Tracks if a spell/trinket already pulsed
+local lastPulse = {}
 
---==============================
--- Show a pulse for a texture
---==============================
+
 local function ShowPulse(texture)
     if not texture then return end
 
@@ -44,47 +38,24 @@ local function ShowPulse(texture)
     end)
 end
 
---==============================
--- Pulse a spell by spellID
---==============================
+
 local function PulseSpell(spellID)
     local tex = GetSpellTexture(spellID, BOOKTYPE_SPELL)
     ShowPulse(tex)
 end
 
---==============================
--- Pulse a trinket slot
---==============================
+
 local function PulseTrinket(slot)
     local tex = GetInventoryItemTexture("player", slot)
     ShowPulse(tex)
 end
 
---==============================
--- Hook TrinketMenu notifications
---==============================
-if TrinketMenu then
-    local oldNotify = TrinketMenu.Notify
-    TrinketMenu.Notify = function(msg)
-        oldNotify(msg)
-        -- Pulse equipped trinkets if notification matches
-        for slot=13,14 do
-            local tex = GetInventoryItemTexture("player", slot)
-            if tex and string.find(msg, GetItemInfo(tex) or "") then
-                ShowPulse(tex)
-            end
-        end
-    end
-end
 
---==============================
--- Main frame to track cooldowns
---==============================
 local frame = CreateFrame("Frame")
 frame:SetScript("OnUpdate", function()
     local now = GetTime()
 
-    -- Track spells
+
     for spellID, name in pairs(trackedSpells) do
         local start, duration, enable = GetSpellCooldown(spellID, BOOKTYPE_SPELL)
         if start and duration then
@@ -98,7 +69,7 @@ frame:SetScript("OnUpdate", function()
         end
     end
 
-    -- Track trinkets (slots 13 and 14)
+
     for _, slot in ipairs({13,14}) do
         local start, duration, enable = GetInventoryItemCooldown("player", slot)
         if start and duration then
