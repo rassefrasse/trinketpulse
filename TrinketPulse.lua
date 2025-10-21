@@ -1,12 +1,9 @@
-
-
 local trackedSpells = {
-    [45] = "Bloodrage", -- add spells
+    [45] = "Bloodrage", -- add spell id
     [37] = "Death Wish",
 }
 
 local lastPulse = {}
-
 
 local function ShowPulse(texture)
     if not texture then return end
@@ -38,23 +35,19 @@ local function ShowPulse(texture)
     end)
 end
 
-
 local function PulseSpell(spellID)
     local tex = GetSpellTexture(spellID, BOOKTYPE_SPELL)
     ShowPulse(tex)
 end
-
 
 local function PulseTrinket(slot)
     local tex = GetInventoryItemTexture("player", slot)
     ShowPulse(tex)
 end
 
-
 local frame = CreateFrame("Frame")
 frame:SetScript("OnUpdate", function()
     local now = GetTime()
-
 
     for spellID, name in pairs(trackedSpells) do
         local start, duration, enable = GetSpellCooldown(spellID, BOOKTYPE_SPELL)
@@ -63,12 +56,11 @@ frame:SetScript("OnUpdate", function()
             if remaining <= 0 and not lastPulse[spellID] then
                 PulseSpell(spellID)
                 lastPulse[spellID] = true
-            elseif remaining > 0 then
-                lastPulse[spellID] = false -- reset when on cooldown
+            elseif remaining > 1.5 then
+                lastPulse[spellID] = false
             end
         end
     end
-
 
     for _, slot in ipairs({13,14}) do
         local start, duration, enable = GetInventoryItemCooldown("player", slot)
@@ -77,7 +69,7 @@ frame:SetScript("OnUpdate", function()
             if remaining <= 0 and not lastPulse[slot] then
                 PulseTrinket(slot)
                 lastPulse[slot] = true
-            elseif remaining > 0 then
+            elseif remaining > 1.5 then
                 lastPulse[slot] = false
             end
         end
