@@ -1,0 +1,1 @@
+/run for i=1,300 do local name = GetSpellName(i, BOOKTYPE_SPELL); if not name then break end; if name=="Bloodrage" or name=="Death Wish" then print(i, name) end end
