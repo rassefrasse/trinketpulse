@@ -1,9 +1,26 @@
-local trackedSpells = {
-    [45] = "Bloodrage", -- add spell id
-    [37] = "Death Wish",
-}
-
 local lastPulse = {}
+local trackedSpells = {}
+
+
+local function UpdateTrackedSpells()
+    local spellNames = { "Bloodrage", "Death Wish" } -- add/change spell names
+
+    for i = 1, 300 do
+        local name = GetSpellName(i, BOOKTYPE_SPELL)
+        if not name then break end
+        for _, targetName in ipairs(spellNames) do
+            if name == targetName then
+                print("Found spell: ", name, "ID: ", i)
+                trackedSpells[i] = name
+            end
+        end
+    end
+end
+
+SLASH_SCANSPELLS1 = "/scanspells"
+SlashCmdList["SCANSPELLS"] = function()
+    UpdateTrackedSpells()
+end
 
 local function ShowPulse(texture)
     if not texture then return end
